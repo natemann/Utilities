@@ -15,7 +15,7 @@ struct Validator {
     private static func validate(regex: NSRegularExpression) -> ValidString {
         return { string in
             if let string = string {
-                return regex.numberOfMatchesInString(string, options: nil, range: NSMakeRange(0, countElements(string))) == 0 ? false : true
+                return regex.numberOfMatchesInString(string, options: nil, range: NSMakeRange(0, count(string))) == 0 ? false : true
             }
             return false
         }
