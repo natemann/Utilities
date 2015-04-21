@@ -13,9 +13,11 @@ public struct Realm {
     
     public static let defaultRealm = RLMRealm.defaultRealm()
     
-    public static func add(object: RLMObject) {
+    public static func add(objects: RLMObject...) {
         write()
-        defaultRealm.addObject(object)
+        for object in objects {
+            defaultRealm.addObject(object)
+        }
         commit()
     }
     
