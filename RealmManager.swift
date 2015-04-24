@@ -14,11 +14,11 @@ public struct Realm {
     public static let defaultRealm = RLMRealm.defaultRealm()
     
     public static func add(objects: RLMObject...) {
-        write()
+        RLMRealm.defaultRealm().beginWriteTransaction()
         for object in objects {
             defaultRealm.addObject(object)
         }
-        commit()
+        RLMRealm.defaultRealm().commitWriteTransaction()
     }
     
     public static func write() {
