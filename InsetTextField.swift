@@ -10,6 +10,19 @@ import Foundation
 
 class InsetTextField: UITextField {
     
+    //    MARK: Constants
+    
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    
+        self.layer.borderWidth = 1.0
+        self.layer.borderColor = UIColor.lightGrayColor().CGColor
+        self.backgroundColor   = .whiteColor()
+        self.textInset         = (10, 10)
+        self.editInset         = (10, 10)
+    }
+    
     var textInset: (dx: CGFloat, dy: CGFloat) = (0,0)
     var editInset: (dx: CGFloat, dy: CGFloat) = (0,0)
     

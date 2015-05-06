@@ -11,10 +11,31 @@ import Realm
 
 public struct Realm {
     
+<<<<<<< Updated upstream
     public static func write(realm: RLMRealm, f: (RLMRealm) -> ()) {
         realm.beginWriteTransaction()
         f(realm)
         realm.commitWriteTransaction()
+=======
+    public static let defaultRealm = RLMRealm.defaultRealm()
+    
+    public static func add(objects: RLMObject...) {
+        
+        let realm = RLMRealm.defaultRealm()
+        realm.beginWriteTransaction()
+        for object in objects {
+            realm.addObject(object)
+        }
+        realm.commitWriteTransaction()
+    }
+    
+    public static func write() {
+        return defaultRealm.beginWriteTransaction()
+    }
+    
+    public static func commit() {
+        return defaultRealm.commitWriteTransaction()
+>>>>>>> Stashed changes
     }
 
 }
