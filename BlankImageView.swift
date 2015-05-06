@@ -17,6 +17,7 @@ class BlankImageView: UIImageView {
         userInteractionEnabled = true
         layer.borderColor = UIColor.lightGrayColor().CGColor
         layer.borderWidth = 1.0
+        image = UIImage(named: "cameraImage")
         let button = UIButton(frame: self.frame)
         button.addTarget(self, action: "buttonPressed:", forControlEvents: .TouchUpInside)
         addSubview(button)
@@ -24,7 +25,8 @@ class BlankImageView: UIImageView {
     
 //    Variables
     
-    public var selectedImage: () -> () = { }
+    var selectedImage: () -> () = { }
+    var containsImage = false
     
     
 //    MARK: instance Methods
