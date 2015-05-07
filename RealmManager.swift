@@ -11,7 +11,7 @@ import Realm
 
 public struct Realm {
     
-    public static func write(realm: RLMRealm, f: (RLMRealm) -> ()) {
+    public static func write(realm: RLMRealm, f: RLMRealm -> ()) {
         realm.beginWriteTransaction()
         f(realm)
         realm.commitWriteTransaction()
