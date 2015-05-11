@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Parse
+import Async
 
 extension PFQuery {
     
