@@ -7,15 +7,16 @@
 //
 
 import Foundation
+import UIKit
+import Parse
+import Async
 
 extension PFQuery {
     
-//    public class func incomeCategoryQuery() -> PFQuery {
-//        return Category.query()!.whereKey("name", equalTo: "Income")
-//    }
+
     
     public func allObjectsInBackground(callBack: [PFObject] -> ()) {
-        var objects = [PFObject]()
+        var objects = [PFObject]()  
         Async.background {
             objects = self.addObjects(0)
             callBack(objects)
