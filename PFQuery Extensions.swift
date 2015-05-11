@@ -7,7 +7,10 @@
 //
 
 import Foundation
+<<<<<<< HEAD
 import UIKit
+=======
+>>>>>>> origin/master
 import Parse
 import Async
 
