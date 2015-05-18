@@ -22,9 +22,10 @@ extension PFQuery {
 
     
     private func addObjects(var to: [PFObject], next: Int) -> BFTask {
+        let task = BFTaskCompletionSource()
         orderByDescending("createdAt")
         skip  = next
-        limit = 2
+        limit = 1000
         return findObjectsInBackground().continueWithBlock {
             if let objects = $0.result as? [PFObject] {
                 if objects.count > 0 {
@@ -32,10 +33,12 @@ extension PFQuery {
                     return self.addObjects(to, next: self.skip + self.limit)
                 }
                 else {
-                    return BFTask(result: to)
+                    task.setResult(to)
+                    return task.task
                 }
             }
-            return BFTask()
+            task.setResult(nil)
+            return task.task
         }
     }
 }
