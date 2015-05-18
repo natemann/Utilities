@@ -10,34 +10,32 @@ import Foundation
 import UIKit
 import Parse
 import Async
+import Bolts
 
 extension PFQuery {
     
 
     
-    public func allObjectsInBackground(callBack: [PFObject] -> ()) {
-        var objects = [PFObject]()  
-        Async.background {
-            objects = self.addObjects(0)
-            callBack(objects)
-        }
+    public func allObjectsInBackground() -> BFTask {
+        return addObjects([PFObject](), next: 0)
     }
 
     
-    private func addObjects(next: Int) -> [PFObject] {
+    private func addObjects(var to: [PFObject], next: Int) -> BFTask {
         orderByDescending("createdAt")
         skip  = next
-        limit = 1000
-        if var objects = findObjects() as? [PFObject] {
-            if objects.count > 0 {
-                return objects + addObjects(skip + limit)
+        limit = 2
+        return findObjectsInBackground().continueWithBlock {
+            if let objects = $0.result as? [PFObject] {
+                if objects.count > 0 {
+                    objects.map { to.append($0) }
+                    return self.addObjects(to, next: self.skip + self.limit)
+                }
+                else {
+                    return BFTask(result: to)
+                }
             }
-            else {
-                return objects
-            }
-        }
-        else {
-            return []
+            return BFTask()
         }
     }
 }
