@@ -6,20 +6,80 @@
 //  Copyright (c) 2015 Nate. All rights reserved.
 //
 
-import Foundation
-import UIKit
 import Parse
-import Async
 import Bolts
+import ReactiveCocoa
+
+extension PFObject {
+    
+    public func racSave() -> SignalProducer<PFObject, NSError> {
+        return SignalProducer { sink, disposable in
+            self.saveInBackgroundWithBlock { (success, error) in
+                if let error = error {
+                    sendError(sink, error)
+                }
+                else {
+                    sendNext(sink, self)
+                    sendCompleted(sink)
+                }
+            }
+        }
+    }
+    
+    
+    public func racDelete() -> SignalProducer<Bool, NSError> {
+        return SignalProducer { sink, disposable in
+            self.deleteInBackgroundWithBlock { (success, error) in
+                if let error = error {
+                    sendError(sink, error)
+                }
+                else {
+                    sendNext(sink, true)
+                    sendCompleted(sink)
+                }
+            }
+        }
+    }
+    
+}
+
+
 
 extension PFQuery {
     
-
+    public func racFindObjects() -> SignalProducer<[PFObject]?, NSError> {
+        return SignalProducer { sink, _ in
+            self.findObjectsInBackgroundWithBlock { (objects, error) in
+                if let error = error {
+                    sendError(sink, error)
+                }
+                else {
+                    if let objects = objects as? [PFObject] {
+                        sendNext(sink, objects)
+                        sendCompleted(sink)
+                    }
+                    else {
+                        sendNext(sink, nil)
+                        sendCompleted(sink)
+                    }
+                }
+            }
+        }
+    }
+    
     
     public func allObjectsInBackground() -> BFTask {
         return addObjects([PFObject](), next: 0)
     }
 
+    
+//    public func racAllObjects() -> SignalProducer<[PFObject]?, NSError> {
+//        return racAddObjects([PFObject](), next: 0)
+//    }
+    
+    
+   
+    
     
     private func addObjects(var to: [PFObject], next: Int) -> BFTask {
         let task = BFTaskCompletionSource()
